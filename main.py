@@ -2,8 +2,8 @@ import json
 import socket
 import sys
 
-IP = sys.argv[1]
-PORT = int(sys.argv[2])
+IP = "0.tcp.ngrok.io"	#sys.argv[1]
+PORT = 18978    #int(sys.argv[2])
 ADDR = (IP, PORT)
 FORMAT = "utf-8"
 SIZE = 1024
@@ -16,9 +16,13 @@ def main():
     client.connect(ADDR)
 
     # Taking USER INPUT 
-    note = input("Enter Your Message : ")
+    if (len(sys.argv) == 2):
+        note = sys.argv[1] #input("Enter Your Message : ")
+    else:
+        print("Note :error : Please Enter your Note !  ")
+        return
 
-    if (note=="!SHOW"):
+    if (note=="-a"):
         client.send(note.encode(FORMAT))
         msg = client.recv(SIZE).decode(FORMAT)
         msg = eval(msg)
