@@ -19,7 +19,7 @@ def main():
     if (len(sys.argv) == 2):
         note = sys.argv[1] #input("Enter Your Message : ")
     else:
-        print("Note :error : Please Enter your Note !  ")
+        print("\n:: Note :error : Please Enter Your Note In Double Quotes (\" \")  ")
         return
 
     if (note=="-a"):
@@ -28,6 +28,7 @@ def main():
         msg = eval(msg)
 
         msg = msg["notes"]
+        msg = msg[::-1]
 
         print("\nYour Messages : ")
         for i in msg:
@@ -37,7 +38,8 @@ def main():
         note = "[STORE]" + note
         client.send(note.encode(FORMAT))
         msg = client.recv(SIZE).decode(FORMAT)
-        print(msg)
+        if msg:
+            print("\n:: Your Note Saved Successfully !")
 
     #Closing the connection from the server.
     client.close()
