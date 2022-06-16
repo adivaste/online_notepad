@@ -1,7 +1,7 @@
 # Online_notepad
 Online Notepad is the Command Line Utility, that is accessd using the Command Line
 
-Using that **'Online-Notepad'** you can perform the following tasks
+Using that `**Online-Notepad**` you can perform the following tasks
 - Add the Note 
 - Delete the Notes
 - Display All the Notes
