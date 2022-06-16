@@ -11,6 +11,7 @@ SIZE = 1024
 # Function Can Be performed on notpad
 def clearAll(client):
     
+    cmd = "[DELALL]"
     # Confirming the deletion
     confirm = input("\n:: Are you really want to DELETE All Your Notes ? (y/n)")
 
@@ -26,13 +27,14 @@ def clearAll(client):
     else :
         print("\n:: Please Choose the correct option (yes/y/no/n) ")
 
-def displayAll(client,cmd):
+def displayAll(client):
     
-    # Sending the msg to server to recieve a NOTE and Store locally
+    cmd = "[SENDCLI]"
+    # Sending the request to the server for retriving content on client side
     client.send(cmd.encode(FORMAT))
     
     # Getting a response from Server
-    strObj = client.recv(SIZE).decode(FORMAT)	# Response is in the format of JSON-String
+    strObj = client.recv(SIZE).decode(FORMAT)		# Response is in the format of JSON-String
     strObj = eval(strObj)				# Single Quoted key, JSON-String is converted to python dictionary ( Python Dict. Support Single Quoted Keynames but JSON requires only Double Quoted Strings so 'eval()' is used to convert into PYTHON DICT.
 
     strObj = strObj["notes"]				# Accessing the "Notes" Array from Python Dictionary (msg)
@@ -51,25 +53,17 @@ def main():
     #Connecting to the server.
     client.connect(ADDR)
 
-    # Taking USER INPUT 
+    # USER INPUT from command line
     if (len(sys.argv) == 2):
-        note = sys.argv[1] #input("Enter Your Message : ")
+        note = sys.argv[1] 
     else:
-        print("\n:: Note :error : Please Enter Your Note In Double Quotes (\" \")  ")
+        print("\n:: Notepad :error : Please Enter Your Note In Double Quotes (\" \")  ")
+	print("\n:: Use [ note -h ] command for help.")
         return
-
+    
+    # Checking the inputs and performing various operations accordingly
     if (note=="-a"):
-        client.send(note.encode(FORMAT))
-        msg = client.recv(SIZE).decode(FORMAT)
-        msg = eval(msg)
-
-        msg = msg["notes"]
-        msg = msg[::-1]
-
-        print("\nYour Messages : ")
-        for i in msg:
-           print(f"* {i}")
-
+        displayAll(client)
     else:
         note = "[STORE]" + note
         client.send(note.encode(FORMAT))
