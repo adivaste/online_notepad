@@ -1,7 +1,7 @@
 import socket
 import json
 from main1 import x,y
-from main2 import keep_alive
+from flaskApp import keep_alive
 
 IP = "localhost"
 PORT = 5050
