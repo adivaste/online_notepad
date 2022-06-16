@@ -1,6 +1,6 @@
 import socket
 import json
-from main1 import x,y
+from ngrokServer import x,y
 from flaskApp import keep_alive
 
 IP = "localhost"

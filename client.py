@@ -43,7 +43,7 @@ def displayAll(client):
     # Printing all the notes
     print("\nYour Notes : ")
     for i in range(len(strObj)):
-        print(f"{i}) {msg[i]}")
+        print(f"{i+1}) {strObj[i]}")
     print()
 
 def main():
@@ -58,7 +58,7 @@ def main():
         note = sys.argv[1] 
     else:
         print("\n:: Notepad :error : Please Enter Your Note In Double Quotes (\" \")  ")
-	print("\n:: Use [ note -h ] command for help.")
+        print("\n:: Use [ note -h ] command for help.")
         return
     
     # Checking the inputs and performing various operations accordingly
