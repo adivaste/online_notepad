@@ -14,7 +14,6 @@ git clone https://github.com/adivaste/online_notepad.git
 ```
 ./setup.py
 ```
-***
 <h3>👉 Usage </h3>
 
 Using that `Online-Notepad` you can perform the following tasks
