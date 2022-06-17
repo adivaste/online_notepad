@@ -2,8 +2,8 @@ import json
 import socket
 import sys
 
-IP = "8.tcp.ngrok.io"	#sys.argv[1]
-PORT = 17614    #int(sys.argv[2])
+IP = "4.tcp.ngrok.io"	#sys.argv[1]
+PORT = 15481    #int(sys.argv[2])
 ADDR = (IP, PORT)
 FORMAT = "utf-8"
 SIZE = 1024
