@@ -10,5 +10,12 @@ Using that `Online-Notepad` you can perform the following tasks
 ```
 note "My First Note"
 ```
-
+2) Display All the Notes
+  ```
+  note -a
+  ```
+3) Delete the Node
+```
+note -d 2
+```
 
