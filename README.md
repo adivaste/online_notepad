@@ -1,10 +1,21 @@
-# Online_notepad
+# Online_notepad ✍️
+
+
+
 Online Notepad is the Command Line Utility, created using Python Socket Programming. Using `Online-Notepad` user can access their Notes from any `Command-Line`
 
-<h3> Setup </h3>
+<h3>👉 Setup </h3>
+
+- Clone this Repository
 ```
 git clone https://github.com/adivaste/online_notepad.git
 ```
+- Run the following Command
+```
+./setup.py
+```
+***
+<h3>👉 Usage </h3>
 
 Using that `Online-Notepad` you can perform the following tasks
 - Add the Note 
