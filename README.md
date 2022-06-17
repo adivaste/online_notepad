@@ -6,15 +6,16 @@ Using that `Online-Notepad` you can perform the following tasks
 - Delete the Notes
 - Display All the Notes
 
-1) Add the note 
+
+**1) Add the note**
 ```
 note "My First Note"
 ```
-2) Display All the Notes
+**2) Display All the Notes**
   ```
   note -a
   ```
-3) Delete the Node
+**3) Delete the Node**
 ```
 note -d 2
 ```
