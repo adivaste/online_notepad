@@ -3,7 +3,7 @@ import socket
 import sys
 
 IP = "4.tcp.ngrok.io"	#sys.argv[1]
-PORT = 15481    #int(sys.argv[2])
+PORT = 11947		#int(sys.argv[2])
 ADDR = (IP, PORT)
 FORMAT = "utf-8"
 SIZE = 1024
@@ -11,12 +11,11 @@ SIZE = 1024
 # Function Can Be performed on notpad
 def clearAll(client):
     
-    cmd = "[DELALL]"
+    cmd = "[CLEARA]"
     # Confirming the deletion
     confirm = input("\n:: Are you really want to DELETE All Your Notes ? (y/n)")
 
     if ((confirm.lower() == "y") or (confirm.lower() == "yes")):   
-        cmd = "-ca"
         client.send(cmd.encode(FORMAT))
    
         response = client.recv(SIZE).decode(FORMAT)
@@ -64,6 +63,8 @@ def main():
     # Checking the inputs and performing various operations accordingly
     if (note=="-a"):
         displayAll(client)
+    elif (note=="-ca"):
+        clearAll(client)
     else:
         note = "[STORE]" + note
         client.send(note.encode(FORMAT))
