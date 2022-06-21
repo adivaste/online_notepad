@@ -2,8 +2,8 @@ import json
 import socket
 import sys
 
-IP = "6.tcp.ngrok.io"	#sys.argv[1]
-PORT = 17788		#int(sys.argv[2])
+IP = str(sys.argv[1])	#sys.argv[1]
+PORT = int(sys.argv[2])		#int(sys.argv[2])
 ADDR = (IP, PORT)
 FORMAT = "utf-8"
 SIZE = 1024
@@ -53,8 +53,8 @@ def main():
     client.connect(ADDR)
 
     # USER INPUT from command line
-    if (len(sys.argv) == 2):
-        note = sys.argv[1] 
+    if (len(sys.argv) == 4):
+        note = sys.argv[3] 
     else:
         print("\n:: Notepad :error : Please Enter Your Note In Double Quotes (\" \")  ")
         print("\n:: Use [ note -h ] command for help.")

@@ -1,3 +1,5 @@
 #!/bin/bash
+host="8.tcp.ngrok.io"
+port=17949
 
-python3 client.py "$@"
+python3 client.py $host $port "$@"
