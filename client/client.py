@@ -1,9 +1,14 @@
 import json
 import socket
 import sys
+import request
 
-IP = str(sys.argv[1])	#sys.argv[1]
-PORT = int(sys.argv[2])		#int(sys.argv[2])
+URL = "https://first-repo.itsadi45.repl.co/host"
+urlObj = requests.get(URL)
+host_port  = eval(urlObj.text)
+
+IP = str(host_port["host"])		#sys.argv[1]
+PORT = int(host_port["port"])		#int(sys.argv[2])
 ADDR = (IP, PORT)
 FORMAT = "utf-8"
 SIZE = 1024
@@ -53,8 +58,8 @@ def main():
     client.connect(ADDR)
 
     # USER INPUT from command line
-    if (len(sys.argv) == 4):
-        note = sys.argv[3] 
+    if (len(sys.argv) == 2):
+        note = sys.argv[1] 
     else:
         print("\n:: Notepad :error : Please Enter Your Note In Double Quotes (\" \")  ")
         print("\n:: Use [ note -h ] command for help.")
