@@ -21,25 +21,11 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 
 # ----------------------- F U N C T I O N S -------------------------------
-'''
-msg = True
-while msg!= DISCONNECTED_MSG:
-    msg  = input()
-    client.send(msg.encode(FORMAT))
-    msg2  = client.recv(SIZE).decode(FORMAT)
-    print(msg2)
-    if msg2 == "300":
-        client.send("Hello".encode(FORMAT))
-        msg3 = client.recv(SIZE).decode(FORMAT)
-        print(msg3 + "...")
-'''
-# ---------------------
 def get():
     PROTOCALL = "GET"
     client.send(PROTOCALL.encode(FORMAT))
     string_of_json = client.recv(SIZE).decode(FORMAT)
     TEMP_DATABASE = json.loads(string_of_json)
-    print(TEMP_DATABASE)
     return TEMP_DATABASE
 def post(msg):
     PROTOCALL = "POST"
@@ -59,11 +45,10 @@ def clear():
     return (response == "202")
 
 def disconnect():
-    client.close()
+    client.send(DISCONNECTED_MSG.encode(FORMAT))
 
 def help():
     msg  = '''
-----------------------------------------------------------------------------------------------
 # COMMANADS :
 
 * FORMAT -
@@ -71,21 +56,16 @@ note [-OPTIONS-] [-OPTIONS-]
 
 * OPTIONS -
 1. [String]             : Any String Within Double Quotes, that will be inserted into NOTEPAD
-
 2. -r -a                : Remove All the notes from the "ONLINE NOTEPAD"
 3. -r -no.              : Remove the perticular Note from NOTEPAD with given index
-
 4. -s -a                : Show All the Notes present in the NOTEPAD
 5. -s                   : Show 10 recent note (By Default)
 6. -s -no.              : Show recent notes of given number
-
 7. -up -filename.txt    : Upload the notes as a file.(*)
 8. -help                : How to use the commnads
 
 * EXTRA'S -
 (*) - Coming Soon (Bulid In Progress)
-----------------------------------------------------------------------------------------------
-
 '''
     print(msg)
 
@@ -103,12 +83,14 @@ def getNotesArray(num=0):
     else:
         print("\n:: Notepad- Error In Retriving The Data !\n")
         return []
-#-----------------------
+
+# ---------------- S T A R T P O I N T ---------------
 def main():
 
     # If No argument passed 
     if (len(CMDL_ARGS) == 1):
         help()
+        disconnect()
 
     # Showing the notes
     elif ((len(CMDL_ARGS) >= 2) and (CMDL_ARGS[1]) == "-s" ):
@@ -117,7 +99,7 @@ def main():
         notes_arr = []
 
         if (len(CMDL_ARGS) == 2):
-            notes_arr_len = len(notes_arr)
+            notes_arr = getNotesArray(10)
         elif (CMDL_ARGS[2] == "-a"):
             notes_arr = getNotesArray()
         elif (CMDL_ARGS[2].isnumeric()):
@@ -131,21 +113,34 @@ def main():
         print("\n* Your Notes : \n")
         for i in range(notes_arr_len):
             print(str(i+1) + ") " + notes_arr[i])
+        disconnect()
 
     # Removing the notes
     elif ((len(CMDL_ARGS) == 3) and (CMDL_ARGS[1]) == "-r" ):
         if (CMDL_ARGS[2] == "-a"):
             clear()
+            print("\n:: Notepad - All Notes Deleted Successfully ! ")
         else:
             print("\n:: Notepad - Please Enter The Commands Correctly !")
+        disconnect()
 
+    # Providing The HELP for user
     elif (CMDL_ARGS[1] == "-h"):
         help()
+        disconnect()
+
+    # Adding the Note into Notepad
+    elif ((len(CMDL_ARGS) == 2)):
+        response = post(CMDL_ARGS[1])
+        if response:
+            print("\n:: Notepad - Note Added Successfully in NOTEBOOK.")
+        else:
+            print("\n:: Notepad - Internal Problem | Please Try Again ")
+        disconnect()
 
     # Giving Error Message 
     else:
         print("\n:: Notepad - Please Enter The Commands Correctly !")
+        disconnect()
 
-    # Disconnect From Server
-    disconnect()
 main()
