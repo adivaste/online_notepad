@@ -10,7 +10,7 @@ SIZE = 1024
 
 # Function Can Be performed on notpad
 def clearAll(client):
-    
+
     cmd = "[CLEARA]"
     # Confirming the deletion
     confirm = input("\n:: Are you really want to DELETE All Your Notes ? (y/n)")
@@ -59,7 +59,7 @@ def main():
         print("\n:: Notepad :error : Please Enter Your Note In Double Quotes (\" \")  ")
         print("\n:: Use [ note -h ] command for help.")
         return
-    
+
     # Checking the inputs and performing various operations accordingly
     if (note=="-a"):
         displayAll(client)
