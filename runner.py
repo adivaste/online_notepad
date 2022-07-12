@@ -2,8 +2,6 @@ import threading
 import time
 import os
 
-os.system("cd server")
-
 def runNGROK():
     os.system("python3 ngrokServer.py")
 def runFile():
