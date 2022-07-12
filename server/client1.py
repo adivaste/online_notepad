@@ -13,8 +13,8 @@ TEMP_DATABASE = {}
 CMDL_ARGS = sys.argv
 
 # PORT AND IP 
-PORT = 5050
-IP =  "127.0.1.1"
+PORT = 15732
+IP =  "0.tcp.ngrok.io"
 ADDR = (IP,PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -110,14 +110,16 @@ def main():
             return
 
         notes_arr_len = len(notes_arr)
-        print("\n* Your Notes : \n")
+        print("* Your Notes :")
         for i in range(notes_arr_len):
             print(str(i+1) + ") " + notes_arr[i])
         disconnect()
 
     # Removing the notes
-    elif ((len(CMDL_ARGS) == 3) and (CMDL_ARGS[1]) == "-r" ):
-        if (CMDL_ARGS[2] == "-a"):
+    elif ((len(CMDL_ARGS) >= 2) and (CMDL_ARGS[1]) == "-r" ):
+        if (len(CMDL_ARGS) == 2):
+            print("\n:: Notepad - Please Enter The Commands Correctly !")
+        elif (CMDL_ARGS[2] == "-a"):
             clear()
             print("\n:: Notepad - All Notes Deleted Successfully ! ")
         else:
@@ -136,7 +138,7 @@ def main():
             print("\n:: Notepad - Note Added Successfully in NOTEBOOK.")
         else:
             print("\n:: Notepad - Internal Problem | Please Try Again ")
-        disconnect()
+        #disconnect()
 
     # Giving Error Message 
     else:

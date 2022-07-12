@@ -1,79 +1,148 @@
-import json
 import socket
+import json
+import time
 import sys
+import os
 
-IP = "6.tcp.ngrok.io"	#sys.argv[1]
-PORT = 17788		#int(sys.argv[2])
-ADDR = (IP, PORT)
+# --------------------- A L L   C O N S T A N T S --------------------------
+
 FORMAT = "utf-8"
+DISCONNECTED_MSG = "! DISCONNECTED"
 SIZE = 1024
+TEMP_DATABASE = {}
+CMDL_ARGS = sys.argv
 
-# Function Can Be performed on notpad
-def clearAll(client):
+# PORT AND IP 
+PORT = 17828
+IP =  "2.tcp.ngrok.io"
+ADDR = (IP,PORT)
 
-    cmd = "[CLEARA]"
-    # Confirming the deletion
-    confirm = input("\n:: Are you really want to DELETE All Your Notes ? (y/n)")
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(ADDR)
 
-    if ((confirm.lower() == "y") or (confirm.lower() == "yes")):   
-        client.send(cmd.encode(FORMAT))
-   
-        response = client.recv(SIZE).decode(FORMAT)
-        if response:
-            print(":: Deleted All the Notes Successfully")
-    elif ((confirm.lower() == "y") or (confirm.lower() == "no")):
-        print("\n:: Your Files are SAFE :) ")
-    else :
-        print("\n:: Please Choose the correct option (yes/y/no/n) ")
+# ----------------------- F U N C T I O N S -------------------------------
+def get():
+    PROTOCALL = "GET"
+    client.send(PROTOCALL.encode(FORMAT))
+    string_of_json = client.recv(SIZE).decode(FORMAT)
+    TEMP_DATABASE = json.loads(string_of_json)
+    return TEMP_DATABASE
+def post(msg):
+    PROTOCALL = "POST"
+    client.send(PROTOCALL.encode(FORMAT))
 
-def displayAll(client):
-    
-    cmd = "[SENDCLI]"
-    # Sending the request to the server for retriving content on client side
-    client.send(cmd.encode(FORMAT))
-    
-    # Getting a response from Server
-    strObj = client.recv(SIZE).decode(FORMAT)		# Response is in the format of JSON-String
-    strObj = eval(strObj)				# Single Quoted key, JSON-String is converted to python dictionary ( Python Dict. Support Single Quoted Keynames but JSON requires only Double Quoted Strings so 'eval()' is used to convert into PYTHON DICT.
+    response1 = client.recv(SIZE).decode(FORMAT)
+    if (response1 == "300"):
+        client.send(msg.encode(FORMAT))
+        response2 = client.recv(SIZE).decode(FORMAT)
+        return (response2 == "201")
+    else:
+        return 0
+def clear():
+    PROTOCALL = "CLEAR"
+    client.send(PROTOCALL.encode(FORMAT))
+    response = client.recv(SIZE).decode(FORMAT)
+    return (response == "202")
 
-    strObj = strObj["notes"]				# Accessing the "Notes" Array from Python Dictionary (msg)
-    strObj = strObj[::-1]				# Reversing that array to show recent notes to client
+def disconnect():
+    client.send(DISCONNECTED_MSG.encode(FORMAT))
 
-    # Printing all the notes
-    print("\nYour Notes : ")
-    for i in range(len(strObj)):
-        print(f"{i+1}) {strObj[i]}")
-    print()
+def help():
+    msg  = '''
+# COMMANADS :
 
+* FORMAT -
+note [-OPTIONS-] [-OPTIONS-]
+
+* OPTIONS -
+1. [String]             : Any String Within Double Quotes, that will be inserted into NOTEPAD
+2. -r -a                : Remove All the notes from the "ONLINE NOTEPAD"
+3. -r -no.              : Remove the perticular Note from NOTEPAD with given index
+4. -s -a                : Show All the Notes present in the NOTEPAD
+5. -s                   : Show 10 recent note (By Default)
+6. -s -no.              : Show recent notes of given number
+7. -up -filename.txt    : Upload the notes as a file.(*)
+8. -help                : How to use the commnads
+
+* EXTRA'S -
+(*) - Coming Soon (Bulid In Progress)
+'''
+    print(msg)
+
+def getNotesArray(num=0):
+    json_notes_obj = get()
+    if json_notes_obj:
+        notes_arr = json_notes_obj["notes"]
+        notes_arr.reverse()
+        notes_arr_len = len(notes_arr)
+
+        if (num !=0):
+            return notes_arr[:num]
+        else:
+            return notes_arr
+    else:
+        print("\n:: Notepad- Error In Retriving The Data !\n")
+        return []
+
+# ---------------- S T A R T P O I N T ---------------
 def main():
-    #Staring a TCP socket
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    #Connecting to the server.
-    client.connect(ADDR)
+    # If No argument passed 
+    if (len(CMDL_ARGS) == 1):
+        help()
+        disconnect()
 
-    # USER INPUT from command line
-    if (len(sys.argv) == 2):
-        note = sys.argv[1] 
+    # Showing the notes
+    elif ((len(CMDL_ARGS) >= 2) and (CMDL_ARGS[1]) == "-s" ):
+
+        # Show All Notes
+        notes_arr = []
+
+        if (len(CMDL_ARGS) == 2):
+            notes_arr = getNotesArray(10)
+        elif (CMDL_ARGS[2] == "-a"):
+            notes_arr = getNotesArray()
+        elif (CMDL_ARGS[2].isnumeric()):
+            num = int(CMDL_ARGS[2])
+            notes_arr = getNotesArray(num)
+        else :
+            print("\n:: Notepad - Please Enter The Commands Correctly !")
+            return
+
+        notes_arr_len = len(notes_arr)
+        print("* Your Notes :")
+        for i in range(notes_arr_len):
+            print(str(i+1) + ") " + notes_arr[i])
+        disconnect()
+
+    # Removing the notes
+    elif ((len(CMDL_ARGS) >= 2) and (CMDL_ARGS[1]) == "-r" ):
+        if (len(CMDL_ARGS) == 2):
+            print("\n:: Notepad - Please Enter The Commands Correctly !")
+        elif (CMDL_ARGS[2] == "-a"):
+            clear()
+            print("\n:: Notepad - All Notes Deleted Successfully ! ")
+        else:
+            print("\n:: Notepad - Please Enter The Commands Correctly !")
+        disconnect()
+
+    # Providing The HELP for user
+    elif (CMDL_ARGS[1] == "-h"):
+        help()
+        disconnect()
+
+    # Adding the Note into Notepad 
+    elif ((len(CMDL_ARGS) == 2)):
+        response = post(CMDL_ARGS[1])
+        if response:
+            print("\n:: Notepad - Note Added Successfully in NOTEBOOK.")
+        else:
+            print("\n:: Notepad - Internal Problem | Please Try Again ")
+        disconnect()
+
+    # Giving Error Message 
     else:
-        print("\n:: Notepad :error : Please Enter Your Note In Double Quotes (\" \")  ")
-        print("\n:: Use [ note -h ] command for help.")
-        return
+        print("\n:: Notepad - Please Enter The Commands Correctly !")
+        disconnect()
 
-    # Checking the inputs and performing various operations accordingly
-    if (note=="-a"):
-        displayAll(client)
-    elif (note=="-ca"):
-        clearAll(client)
-    else:
-        note = "[STORE]" + note
-        client.send(note.encode(FORMAT))
-        msg = client.recv(SIZE).decode(FORMAT)
-        if msg:
-            print("\n:: Your Note Saved Successfully !")
-
-    #Closing the connection from the server.
-    client.close()
-
-if __name__ == "__main__":
-    main()
+main()

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo mv ./client.py ./note /usr/bin/
+echo "All The File Moved Securely, Now you can use ONLINE NOTEPAD !"
