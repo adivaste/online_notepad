@@ -6,13 +6,20 @@ Online Notepad is the Command Line Utility, created using Python Socket Programm
 
 <h3>👉 Setup </h3>
 
-- Clone this Repository
+- Clone Online_Notepad_Client Repository
 ```
-git clone https://github.com/adivaste/online_notepad.git
+git clone https://github.com/adivaste/online_notepad_client.git
 ```
-- Run the following Command
+- Navigate to the Directory `Online_Notepad_Client`
 ```
-./setup.py
+cd online_notepad_client
+```
+- Run the following Commands to give permissions for execution
+```
+chmod 777 start
+```
+```
+./start
 ```
 <h3>👉 Usage </h3>
 
