@@ -1,1 +1,1 @@
-worker: python ./server/runner.py
+worker: python runner.py
