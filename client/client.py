@@ -13,8 +13,8 @@ TEMP_DATABASE = {}
 CMDL_ARGS = sys.argv
 
 # PORT AND IP 
-PORT = 17828
-IP =  "2.tcp.ngrok.io"
+PORT = 17710
+IP =  "8.tcp.ngrok.io"
 ADDR = (IP,PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
