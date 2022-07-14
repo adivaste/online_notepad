@@ -42,21 +42,3 @@ note "My First Note"
 note -r -a
 ```
 
-
-
-               ┌─────────────────────┐
-               │                     │
-         ┌─────►     S E R V E R     ◄───┐
-         │     │                     │   │
-         │     └─────────▲───────────┘   │
-         │               │               │
-         │               │               │
-  ┌──────▼──────┐ ┌──────▼──────┐
-┌──────▼──────┐
-  │  TERMINAL 1 │ │  TERMINAL 2 │
-│  TERMINAL 3 │
-  └─────────────┘ └─────────────┘
-└─────────────┘
-
-  You can access the notes/file across multiple devices
-  without login.
