@@ -3,7 +3,7 @@ import threading
 import time
 import os
 import json
-
+import traceback
 # --------------------- A L L   C O N S T A N T S --------------------------
 
 FORMAT = "utf-8"
@@ -98,31 +98,37 @@ def recieveDataFromClient():
 # Handle the Client 
 def handleClient(conn,addr):
     print(f"[ NEW CONNECTION ] Server is Connected to {addr}")
-
-    isConnected  = True
-    while isConnected:
-        msg = conn.recv(SIZE).decode(FORMAT)
-        createNotepadFile()
-        if msg:
-            print(f"{addr} : {msg}")
-
-            if (msg == DISCONNECTED_MSG):
-                isConnected = False
-                conn.send("100".encode(FORMAT))
-            elif (msg == "POST"):
-                conn.send("300".encode(FORMAT))
-                note = conn.recv(SIZE).decode(FORMAT)
-                response = fileOperations(msg,note)
-                conn.send(response.encode(FORMAT))
-            elif (msg == "GET"):
-                note = fileOperations(msg)
-                conn.send(note.encode(FORMAT))
-            elif (msg == "CLEAR"):
-                response = fileOperations(msg)
-                conn.send(response.encode(FORMAT))
-            else:
-                conn.send("400".encode(FORMAT))
-
+    
+    try:
+        isConnected  = True
+        while isConnected:
+            msg = conn.recv(SIZE).decode(FORMAT)
+            createNotepadFile()
+            if msg:
+                print(f"{addr} : {msg}")
+    
+                if (msg == DISCONNECTED_MSG):
+                    isConnected = False
+                    conn.send("100".encode(FORMAT))
+                elif (msg == "POST"):
+                    conn.send("300".encode(FORMAT))
+                    note = conn.recv(SIZE).decode(FORMAT)
+                    response = fileOperations(msg,note)
+                    conn.send(response.encode(FORMAT))
+                elif (msg == "GET"):
+                    note = fileOperations(msg)
+                    conn.send(note.encode(FORMAT))
+                elif (msg == "CLEAR"):
+                    response = fileOperations(msg)
+                    conn.send(response.encode(FORMAT))
+                else:
+                    conn.send("400".encode(FORMAT))
+                    
+    except Exception as exception:
+        print("--------------")
+        traceback.print_exc()
+        print("--------------")
+        
     conn.close()
     print(f"[ END CONNECTION ] Server Securely Disconnected from {addr}")
 
